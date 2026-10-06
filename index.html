@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TIMO Challenge – Khối 5</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--ink:#172033;--muted:#65718a;--primary:#5b5ce2;--primary2:#7c4dff;--good:#16a34a;--bad:#dc2626;--line:#e5e9f2;--gold:#f59e0b}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(135deg,#eef3ff,#f9fbff 55%,#fff4e8);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}
+button,input{font:inherit}
+.app{max-width:1100px;margin:auto;padding:24px}
+.hero{background:linear-gradient(135deg,#5146d9,#8b5cf6);color:white;border-radius:26px;padding:28px;box-shadow:0 18px 45px #5146d933}
+.hero h1{margin:0 0 8px;font-size:34px}.hero p{margin:5px 0;opacity:.92}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;margin-top:18px;box-shadow:0 10px 30px #1f2a4410}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.choice-card{border:2px solid var(--line);border-radius:18px;padding:16px;cursor:pointer;transition:.2s;background:white}
+.choice-card:hover{transform:translateY(-2px);border-color:#a8a9ff}.choice-card.selected{border-color:var(--primary);background:#f3f3ff}
+.choice-card strong{display:block;margin-bottom:5px}.small{color:var(--muted);font-size:14px}
+label{display:block;font-weight:700;margin:14px 0 7px}
+.text-input{width:100%;padding:13px 15px;border:1px solid #d8deea;border-radius:12px;outline:none}
+.text-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px #5b5ce21a}
+.btn{border:0;border-radius:13px;padding:12px 18px;font-weight:800;cursor:pointer}
+.btn-primary{background:var(--primary);color:white}.btn-secondary{background:#eef0f8;color:#313a52}.btn-danger{background:#fee2e2;color:#991b1b}
+.topbar{position:sticky;top:8px;z-index:5;background:#ffffffed;backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:18px;padding:12px 16px;display:flex;gap:14px;align-items:center;box-shadow:0 8px 25px #0000000c}
+.stat{padding:7px 11px;border-radius:10px;background:#f1f3f9;font-weight:800;font-size:14px}
+.timer{margin-left:auto;background:#fff1d6;color:#9a5b00}.progress{height:9px;background:#e9edf5;border-radius:999px;overflow:hidden;margin-top:10px}.progress>div{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));width:0}
+.qnav{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}.qnav button{width:34px;height:34px;border:1px solid var(--line);background:white;border-radius:9px;font-weight:800;cursor:pointer}.qnav button.done{background:#e7e9ff;border-color:#b8b9ff}.qnav button.correct{background:#dcfce7;border-color:#86efac}.qnav button.wrong{background:#fee2e2;border-color:#fca5a5}
+.question{background:white;border:1px solid var(--line);border-radius:20px;padding:22px;margin:15px 0;scroll-margin-top:90px}
+.qhead{display:flex;justify-content:space-between;gap:10px;align-items:center}.badge{font-size:12px;font-weight:900;background:#eef0ff;color:#4c45c7;padding:6px 9px;border-radius:999px}.qtext{white-space:pre-wrap;line-height:1.55;margin:16px 0;font-size:16px}
+.options{display:grid;gap:10px}.opt{display:flex;gap:11px;align-items:flex-start;border:1px solid #dfe4ee;padding:13px;border-radius:13px;cursor:pointer}.opt:hover{background:#fafaff}.opt input{margin-top:4px;accent-color:var(--primary)}
+.img-toggle{margin-top:10px}.source-img{display:none;margin-top:12px;max-width:100%;border-radius:14px;border:1px solid var(--line);box-shadow:0 8px 20px #00000012}.source-img.show{display:block}
+.result-score{font-size:54px;font-weight:900;color:var(--primary);text-align:center}.result-sub{text-align:center;color:var(--muted)}
+.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}.break{padding:14px;border:1px solid var(--line);border-radius:14px}.review-item{padding:15px;border-radius:14px;border-left:5px solid var(--bad);background:#fff7f7;margin:10px 0}.review-item.ok{border-left-color:var(--good);background:#f5fff8}
+.hidden{display:none!important}.footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 0}
+@media(max-width:650px){.app{padding:12px}.hero h1{font-size:27px}.topbar{flex-wrap:wrap}.timer{margin-left:0}.qtext{font-size:15px}}
+</style>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [["\\(","\\)"],["$","$"]],
+    displayMath: [["\\[","\\]"],["$$","$$"]]
+  },
+  options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<div class="app">
+  <div id="setup">
+    <div class="hero">
+      <h1>🏆 TOÁN A.TRUNG TIMO CHALLEGE - GRATE 5</h1>
+      <p>Ngân hàng <b>500 câu hỏi Toán TIMO của TOÁN A.TRUNG</b></p>
+    </div>
+<div class="panel">
+      <label>Họ và tên học sinh:</label>
+      <input id="studentName" class="text-input" placeholder="Nhập họ và tên...">
+      <label>Lớp:</label>
+      <input id="studentClass" class="text-input" placeholder="Nhập lớp...">
+      <label>Trường:</label>
+      <input id="studentSchool" class="text-input" placeholder="Nhập tên trường...">
+      <label>Tỉnh:</label>
+      <input id="studentProvince" class="text-input" placeholder="Nhập tỉnh/thành phố...">
+      <label>Chọn vòng thi:</label>
+      <div id="roundGrid" class="grid"></div>
+      <label>Chọn đề:</label>
+      <div id="testGrid" class="grid"></div>
+      <label>Chế độ:</label>
+      <div class="grid">
+        <div class="choice-card selected" data-mode="practice" onclick="chooseMode('practice')"><strong>🎯 Luyện tập</strong><span class="small">Không giới hạn thời gian.</span></div>
+        <div class="choice-card" data-mode="exam" onclick="chooseMode('exam')"><strong>⏱️ Thi</strong><span class="small">Có đồng hồ theo thời lượng của đề.</span></div>
+      </div>
+      <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="startGame()">🚀 Bắt đầu</button>
+        <button class="btn btn-secondary" onclick="showAllInfo()">📚 Xem cấu trúc bộ đề</button>
+      </div>
+    </div>
+    <div id="info" class="panel hidden"></div>
+  </div>
+
+  <div id="game" class="hidden">
+    <div class="topbar">
+      <div class="stat" id="testTitle"></div>
+      <div class="stat" id="scoreStat">⭐ 0</div>
+      <div class="stat" id="answeredStat">0/25</div>
+      <div class="stat timer" id="timer">⏱️ —</div>
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+    <div class="qnav" id="qnav"></div>
+    <div id="questions"></div>
+    <div class="panel" style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-secondary" onclick="backToSetup()">← Chọn đề khác</button>
+      <button class="btn btn-primary" onclick="submitGame(false)">Nộp bài ✓</button>
+    </div>
+  </div>
+
+  <div id="result" class="hidden">
+    <div class="hero">
+      <h1>🎉 Kết quả bài làm</h1>
+      <p id="resultName"></p>
+    </div>
+    <div class="panel">
+      <div class="result-score" id="resultScore"></div>
+      <div class="result-sub" id="resultSub"></div>
+      <div class="breakdown" id="breakdown" style="margin-top:20px"></div>
+      <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+        <button class="btn btn-primary" onclick="reviewWrong()">🔎 Xem lại bài</button>
+        <button class="btn btn-secondary" onclick="backToSetup()">🏠 Về màn hình chọn đề</button>
+      </div>
+    </div>
+    <div id="review" class="panel hidden"></div>
+  </div>
+  <div class="footer">Tài liệu nguồn: Bộ đề ôn thi Olympic Toán học quốc tế TIMO – Khối 5.</div>
+</div>
+
+<script src="questions.js"></script>
+<script>
+const DATA = QUESTIONS;
+const PAGE_IMAGES = IMAGE_MAP;
+let selectedRound="Vòng loại", selectedTest="Vòng loại - Đề 1", mode="practice";
+let currentQuestions=[], timerId=null, secondsLeft=0, submitted=false, lastResults=[];
+
+const byTest = {};
+DATA.forEach(q => (byTest[q.test] ||= []).push(q));
+
+function renderSetup(){
+  const rounds=[["Vòng loại","Vòng loại - 60 phút/đề"],["Vòng quốc gia","Vòng Quốc gia - 90 phút/đề"]];
+  document.getElementById("roundGrid").innerHTML=rounds.map(([r,s]) =>
+    `<div class="choice-card ${selectedRound===r?"selected":""}" onclick="chooseRound('${r}')"><strong>${s}</strong><span class="small">25 câu hỏi</span></div>`).join("");
+  renderTests();
+}
+function chooseRound(r){selectedRound=r;selectedTest=selectedRound+" - Đề 1";renderSetup();}
+function renderTests(){
+  const names=Object.keys(byTest).filter(x=>x.startsWith(selectedRound));
+  document.getElementById("testGrid").innerHTML=names.map(n=>{
+    return `<div class="choice-card ${selectedTest===n?"selected":""}" onclick="chooseTest('${n}')"><strong>${n}</strong><span class="small">25 câu hỏi</span></div>`;
+  }).join("");
+}
+function chooseTest(n){selectedTest=n;renderTests();}
+function chooseMode(m){mode=m;document.querySelectorAll("[data-mode]").forEach(x=>x.classList.toggle("selected",x.dataset.mode===m));}
+function showAllInfo(){
+  const el=document.getElementById("info");el.classList.remove("hidden");
+  el.innerHTML=`<h2>📚 Cấu trúc bộ đề</h2>
+  <p>Tài liệu gồm 10 đề, mỗi đề 25 câu. Năm chủ đề: <b>Tư duy logic, Số học, Lý thuyết số, Hình học, Tổ hợp</b>.</p>
+  <p>Vòng loại: 25 câu, 100 điểm, 60 phút, trắc nghiệm. Vòng quốc gia: 25 câu, 100 điểm, 90 phút, điền đáp án.</p>
+  <p>Trong game, mỗi câu được tính 4 điểm. Các câu có hình/biểu đồ có nút <b>Xem hình gốc</b> để học sinh đối chiếu đúng với tài liệu.</p>`;
+}
+function startGame(){
+  currentQuestions=byTest[selectedTest].map(x=>({...x}));
+  submitted=false;lastResults=[];
+  document.getElementById("setup").classList.add("hidden");
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+  document.getElementById("testTitle").textContent=selectedTest;
+  renderGame();
+  if(mode==="exam"){
+    secondsLeft=selectedRound==="Vòng loại"?60*60:90*60;
+    updateTimer(); timerId=setInterval(()=>{secondsLeft--;updateTimer();if(secondsLeft<=0)submitGame(true)},1000);
+  }else document.getElementById("timer").textContent="⏱️ Luyện tập";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function renderGame(){
+  const qnav=document.getElementById("qnav");
+  qnav.innerHTML=currentQuestions.map((q,i)=>`<button id="nav${i}" onclick="document.getElementById('q-${i}').scrollIntoView({behavior:'smooth'})">${i+1}</button>`).join("");
+  document.getElementById("questions").innerHTML=currentQuestions.map((q,i)=>renderQuestion(q,i)).join("");
+  typesetMath(document.getElementById("questions"));
+  updateStats();
+}
+function renderQuestion(q,i){
+  const imageSrc = (q.hasImage && PAGE_IMAGES[q.id]) || (q.hasImage && PAGE_IMAGES[q.page] ? PAGE_IMAGES[q.page] : "");
+  const image= imageSrc ? `<button class="btn btn-secondary img-toggle" onclick="toggleImage(${i})">🖼️ Xem hình gốc</button><img id="img-${i}" class="source-img" src="${imageSrc}" alt="Hình gốc của câu hỏi">` : "";
+  let answerHtml="";
+  if(q.options){
+    answerHtml=`<div class="options">${q.options.map((o,j)=>{
+      const letter="ABCD"[j];
+      return `<label class="opt"><input type="radio" name="q${i}" value="${letter}" onchange="markAnswered(${i})"><span><b>${letter}.</b> ${escapeHtml(o)}</span></label>`;
+    }).join("")}</div>`;
+  }else{
+    answerHtml=`<input class="text-input" id="ans-${i}" placeholder="${escapeHtml(q.inputHint||'Nhập đáp án')}" oninput="markAnswered(${i})">`;
+  }
+  return `<div class="question" id="q-${i}">
+    <div class="qhead"><span class="badge">${q.topic}</span><b>Câu ${q.q}</b></div>
+    <div class="qtext">${renderMathText(q.text)}</div>
+    ${answerHtml}${image}
+  </div>`;
+}
+function renderMathText(s){
+  // Convert common LaTeX that appears in source data without math delimiters.
+  // Delimited LaTeX (\(...\), \[...\], $$...$$) is left for MathJax.
+  let t = String(s ?? "");
+  t = t.replace(/\\text\{\s*-\s*\}/g, "−")
+       .replace(/\\times/g, "×")
+       .replace(/\\cdot/g, "·")
+       .replace(/\\div/g, "÷")
+       .replace(/\\pm/g, "±")
+       .replace(/\\leq/g, "≤")
+       .replace(/\\geq/g, "≥")
+       .replace(/\\neq/g, "≠")
+       .replace(/\\text\{([^{}]*)\}/g, "$1");
+  return t.replace(/\r?\n/g, "<br>");
+}
+function typesetMath(el){
+  if (window.MathJax && window.MathJax.typesetPromise && el) {
+    MathJax.typesetPromise([el]).catch(err => console.error("MathJax error:", err));
+  }
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));}
+function toggleImage(i){document.getElementById("img-"+i).classList.toggle("show");}
+function markAnswered(i){document.getElementById("nav"+i).classList.add("done");updateStats();}
+function getUserAnswer(i){
+  const q=currentQuestions[i];
+  if(q.options){const x=document.querySelector(`input[name="q${i}"]:checked`);return x?x.value:"";}
+  return (document.getElementById("ans-"+i)?.value||"").trim();
+}
+function updateStats(){
+  const answered=currentQuestions.filter((_,i)=>getUserAnswer(i)!=="").length;
+  document.getElementById("answeredStat").textContent=`${answered}/25`;
+  document.getElementById("progressBar").style.width=(answered/25*100)+"%";
+  let live=0; currentQuestions.forEach((q,i)=>{if(q.options && getUserAnswer(i)===q.answer)live++});
+  document.getElementById("scoreStat").textContent=`⭐ ${live*4}`;
+}
+function updateTimer(){
+  const m=Math.floor(secondsLeft/60).toString().padStart(2,"0"), s=(secondsLeft%60).toString().padStart(2,"0");
+  document.getElementById("timer").textContent=`⏱️ ${m}:${s}`;
+}
+function norm(v){
+  let s=String(v??"").trim().toLowerCase().replace(/,/g,"").replace(/\s+/g," ");
+  if(!s)return "";
+  s=s.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  // mixed fraction: 1 1/4 -> 5/4
+  const m=s.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);
+  if(m){const a=Number(m[1]),b=Number(m[2]),c=Number(m[3]);s=((a*c+b)+"/"+c);}
+  return s;
+}
+function isCorrect(q,user){
+  if(!user)return false;
+  const a=norm(q.answer), b=norm(user);
+  if(a===b)return true;
+  // Accept equivalent simple fractions and integer numeric forms.
+  const frac=x=>{const m=x.match(/^(-?\d+)\/(\d+)$/);return m?Number(m[1])/Number(m[2]):Number.NaN};
+  const fa=frac(a),fb=frac(b);
+  if(Number.isFinite(fa)&&Number.isFinite(fb)) return Math.abs(fa-fb)<1e-10;
+  const na=Number(a),nb=Number(b);
+  if(Number.isFinite(na)&&Number.isFinite(nb)) return na===nb;
+  return false;
+}
+function submitGame(auto){
+  if(submitted)return;
+  if(!auto && !confirm("Bạn chắc chắn muốn nộp bài?"))return;
+  submitted=true;
+  if(timerId){clearInterval(timerId);timerId=null;}
+  lastResults=currentQuestions.map((q,i)=>({q,user:getUserAnswer(i),ok:isCorrect(q,getUserAnswer(i))}));
+  const correct=lastResults.filter(x=>x.ok).length, score=correct*4;
+  document.getElementById("game").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
+  const studentName=document.getElementById("studentName").value||"Học sinh";
+  const studentClass=document.getElementById("studentClass").value;
+  const studentSchool=document.getElementById("studentSchool").value;
+  const studentProvince=document.getElementById("studentProvince").value;
+  const profile=[studentName,studentClass && `Lớp ${studentClass}`,studentSchool,studentProvince].filter(Boolean).join(" • ");
+  document.getElementById("resultName").textContent=`${profile} • ${selectedTest}`;
+  document.getElementById("resultScore").textContent=`${score}/100`;
+  document.getElementById("resultSub").textContent=`Đúng ${correct}/25 câu • ${Math.round(score)}% • ${mode==="exam"?"Chế độ thi":"Chế độ luyện tập"}`;
+  const topics=["Tư duy logic","Số học","Lý thuyết số","Hình học","Tổ hợp"];
+  document.getElementById("breakdown").innerHTML=topics.map(t=>{
+    const arr=lastResults.filter(x=>x.q.topic===t);const c=arr.filter(x=>x.ok).length;
+    return `<div class="break"><b>${t}</b><br>${c}/${arr.length} đúng<br><span class="small">${c*4} điểm</span></div>`;
+  }).join("");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function reviewWrong(){
+  const el=document.getElementById("review");el.classList.remove("hidden");
+  el.innerHTML="<h2>🔎 Xem lại từng câu</h2>"+lastResults.map((r,i)=>{
+    const q=r.q, correctText=q.options?`${q.answer}. ${q.options["ABCD".indexOf(q.answer)]}`:q.answer;
+    return `<div class="review-item ${r.ok?"ok":""}">
+      <b>Câu ${q.q} – ${q.topic}</b><br>
+      ${r.ok?"✅ Đúng":"❌ Chưa đúng"}<br>
+      <span class="small">Bạn trả lời: <b>${escapeHtml(r.user||"(bỏ trống)")}</b> • Đáp án: <b>${escapeHtml(correctText)}</b></span>
+    </div>`;
+  }).join("");
+}
+function backToSetup(){
+  if(timerId){clearInterval(timerId);timerId=null;}
+  document.getElementById("game").classList.add("hidden");
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("setup").classList.remove("hidden");
+  renderSetup();window.scrollTo({top:0,behavior:"smooth"});
+}
+renderSetup();
+</script>
+</body>
+</html>
